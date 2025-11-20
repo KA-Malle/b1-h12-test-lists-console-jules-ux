@@ -4,15 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace Test_Lists_console_START
 {
     internal class Program
     {
         /*
-         * NAAM: 
-         * KLAS:
-         * DATUM:
+         * NAAM: Jules Stoop 
+         * KLAS: 6ICW
+         * DATUM: 20/11/2025
         */
 
         static void Main(string[] args)
@@ -24,7 +25,12 @@ namespace Test_Lists_console_START
 
             // Declaratie
             List<string[]> cars = new List<string[]>();
-            // aanvullen...
+            // Bestand inlezen en vullen van de lijst 'cars'
+            cars = BestandInlezen();
+     
+            ToonWagens(cars);
+            
+         
 
 
             // Bestand inlezen
@@ -36,23 +42,26 @@ namespace Test_Lists_console_START
 
             // 1. (Lambda) Zoek de eerste wagen met benzine als brandstof
             Console.WriteLine("Eerste wagen met benzine:");
-            // aanvullen...
+
+            List<string[]> bevatBezine = cars.FindAll(bezineIn);
+            ToonWagens(bevatBezine);
+            
 
 
             // 2. (Lambda) Vind alle wagens onder een bepaalde prijs (bijvoorbeeld onder 15000 euro)
             Console.WriteLine("\nWagens onder 15.000 EUR:");
-            // aanvullen...
+            List<string[]> onder15 = cars.FindAll(prijs15);
+            ToonWagens(onder15);
 
 
             // 3. (Lambda) Zoek wagens van een specifiek merk (bijvoorbeeld "Fiat")
             Console.WriteLine("\nAlle wagens van het merk Fiat:");
-            // aanvullen...
-
-
+            List<string[]> bevatFiat = cars.FindAll(bevatFi);
+            ToonWagens(bevatFiat);
 
             // 4. (Predicate) Zoek wagens met CO2-uitstoot hoger dan 120 g/km
             Console.WriteLine("\nWagens met CO2-uitstoot hoger dan 120 g/km:");
-            // aanvullen...
+            
 
 
             // Voeg een wagen toe + tonen
@@ -64,9 +73,38 @@ namespace Test_Lists_console_START
             Console.ReadLine();
         }
 
+        private static bool bevatFi(string[] car)
+        {
+            return (car[0] == "Fiat");
+        }
+
+        private static bool prijs15(string[] car)
+        {
+            return (Convert.ToInt32(car[3]) < 15000);
+        }
+
+        private static bool bezineIn(string[] car)
+        {
+          
+            return (car[2] == "Benzine" || car[2] == "Elektrisch/Benzine");
+        }
+
+        private static void ToonWagens(List<string[]> cars)
+        {
+            foreach (var car in cars)
+            {
+                // Controleer of het car-array minstens 2 elementen heeft
+                if (car.Length >= 2)
+                {
+                    Console.WriteLine("{0} ({1} {2} {3}", car[0], car[1].PadRight(25), car[2].PadRight(15), car[3].PadRight(15));
+                }
+               
+            }
+        }
+
 
         // Bestand inlezen
-         private static List<string[]> BestandInlezen()
+        private static List<string[]> BestandInlezen()
         {
             List<string[]> tempCars = new List<string[]>();
             string volledigeLijn;
@@ -82,6 +120,8 @@ namespace Test_Lists_console_START
 
             return tempCars;
         }
+
+        
 
 
         // De eerste parameter is de tekst die verkort moet worden
